@@ -1,0 +1,117 @@
+/* Definindo variáveis CSS para tornar as cores e fontes reutilizáveis */
+:root {
+  --font-family-primary: 'Roboto', sans-serif; /* Fonte primária */
+  --font-family-secondary: 'Open Sans', sans-serif; /* Fonte secundária */
+  --font-weight-normal: 400; /* Peso normal da fonte */
+  --font-weight-medium: 500; /* Peso médio da fonte */
+  --font-weight-bold: 700; /* Peso negrito da fonte */
+ 
+  --color-primary: #4fc3f7; /* Azul claro */
+  --color-secondary: #81d4fa; /* Azul ainda mais claro */
+  --color-background: #fafafa; /* Fundo claro */
+  --color-text-primary: #333333; /* Texto escuro */
+  --color-text-secondary: #757575; /* Texto secundário */
+  --color-danger: #ff7961; /* Vermelho claro */
+  --color-success: #66bb6a; /* Verde claro */
+ 
+  --border-radius: 8px; /* Borda mais arredondada para elementos */
+}
+ 
+/* Estilo para o corpo da página */
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column; /* Alinha os itens em uma coluna */
+  align-items: center; /* Alinha os itens no centro da tela */
+  min-height: 100vh; /* Garantir que o conteúdo ocupe 100% da altura da tela */
+  padding: 2rem; /* Espaçamento interno */
+  background-color: var(--color-background); /* Cor de fundo definida pelas variáveis */
+  color: var(--color-text-primary); /* Cor do texto definida pelas variáveis */
+}
+ 
+/* Estilo para o título principal */
+h1 {
+  font-size: 2.5em; /* Tamanho grande para o título */
+  font-weight: var(--font-weight-bold); /* Peso de fonte em negrito */
+  color: var(--color-primary); /* Cor do título */
+  margin-bottom: 1rem; /* Espaçamento inferior */
+}
+ 
+/* Estilo para subtítulos */
+h2 {
+  font-size: 1.8em; /* Tamanho de fonte menor que o h1 */
+  font-weight: var(--font-weight-medium); /* Peso médio da fonte */
+  color: var(--color-text-primary); /* Cor do texto */
+}
+ 
+/* Estilo para botões */
+button {
+  border: none; /* Sem borda padrão */
+  border-radius: var(--border-radius); /* Bordas arredondadas */
+  padding: 0.7em 1.2em; /* Espaçamento interno do botão */
+  font-family: var(--font-family-primary); /* Fonte primária */
+  font-weight: var(--font-weight-medium); /* Peso médio da fonte */
+  background-color: var(--color-primary); /* Cor de fundo */
+  color: #fff; /* Cor do texto (branco) */
+  cursor: pointer; /* Muda o cursor para uma mãozinha ao passar por cima */
+  transition: background-color 0.2s ease, box-shadow 0.2s ease; /* Efeitos de transição ao passar o mouse */
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+ 
+/* Efeito ao passar o mouse sobre o botão */
+button:hover {
+  background-color: #42a5f5; /* Cor de fundo alterada ao passar o mouse */
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15); /* Aumento da sombra */
+}
+ 
+/* Estilo para o botão de excluir */
+button.delete {
+  background-color: var(--color-danger); /* Cor de fundo vermelha para exclusão */
+}
+ 
+/* Efeito ao passar o mouse sobre o botão de excluir */
+button.delete:hover {
+  background-color: #ff5252; /* Cor mais intensa ao passar o mouse */
+}
+ 
+/* Estilo para campos de entrada (input) */
+input {
+  padding: 0.5em; /* Espaçamento interno */
+  border: 1px solid var(--color-secondary); /* Cor de borda suave */
+  border-radius: var(--border-radius); /* Bordas arredondadas */
+  width: 100%; /* Ocupa 100% da largura disponível */
+  font-size: 1em; /* Tamanho de fonte padrão */
+}
+ 
+/* Estilo para a tabela */
+table {
+  width: 100%; /* Ocupa 100% da largura disponível */
+  border-collapse: collapse; /* Remove o espaçamento entre as células */
+  margin-top: 1.5rem; /* Espaço acima da tabela */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave ao redor da tabela */
+}
+ 
+/* Estilo para cabeçalhos e células da tabela */
+th, td {
+  padding: 1rem; /* Espaçamento interno das células */
+  text-align: left; /* Alinha o texto à esquerda */
+  border-bottom: 1px solid var(--color-secondary); /* Linha separadora entre as linhas */
+}
+ 
+/* Estilo para os cabeçalhos da tabela */
+th {
+  background-color: var(--color-primary); /* Cor de fundo azul claro */
+  color: #fff; /* Cor do texto (branco) */
+  font-weight: var(--font-weight-bold); /* Fonte em negrito */
+}
+ 
+/* Estilos para modo escuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #181818; /* Fundo escuro */
+    --color-text-primary: #e0e0e0; /* Texto claro */
+    --color-text-secondary: #bdbdbd; /* Texto secundário mais claro */
+    --color-primary: #64b5f6; /* Azul claro para o modo escuro */
+    --color-secondary: #455a64; /* Cor mais escura para o secundário */
+  }
+}
