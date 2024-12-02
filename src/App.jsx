@@ -3,34 +3,50 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import axios from 'axios';
 import UserList from './components/UserList';
 import UserForm from './components/UserForm';
-import { Container, Typography, Box, Grid, Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
+import TaskList from './components/TaskList';
+import TaskForm from './components/TaskForm';
+import {
+  Container,
+  Typography,
+  Box,
+  Grid,
+  Snackbar,
+  Alert,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from '@mui/material';
 import { API_BASE_URL } from './utils/config';
 
-// Página Home
 const Home = () => (
   <Box sx={{ mt: 3, textAlign: 'center' }}>
     <Typography variant="h4" component="h1" gutterBottom>
-      Bem-vindo ao Sistema de Gerenciamento de Usuários
+      Bem-vindo ao Sistema de Gerenciamento
     </Typography>
-    <Typography variant="h6" color="white">
-      Navegue até "Gerenciar Usuários" para visualizar e gerenciar os usuários cadastrados.
+    <Typography variant="h6">
+      Navegue até "Gerenciar Usuários" ou "Gerenciar Tarefas" para visualizar e gerenciar os dados cadastrados.
     </Typography>
   </Box>
 );
 
 const App = () => {
   const [users, setUsers] = useState([]);
+  const [tasks, setTasks] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedTask, setSelectedTask] = useState(null);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
+  const [deleteEntityType, setDeleteEntityType] = useState(''); // 'user' ou 'task'
   const [userToDelete, setUserToDelete] = useState(null);
-  const [userToUpdate, setUserToUpdate] = useState(null);
+  const [taskToDelete, setTaskToDelete] = useState(null);
 
   useEffect(() => {
     fetchUsers();
+    fetchTasks();
   }, []);
 
   const fetchUsers = async () => {
@@ -39,6 +55,15 @@ const App = () => {
       setUsers(response.data);
     } catch (error) {
       console.error('Erro ao buscar usuários:', error);
+    }
+  };
+
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/tasks`);
+      setTasks(response.data);
+    } catch (error) {
+      console.error('Erro ao buscar tarefas:', error);
     }
   };
 
@@ -57,63 +82,57 @@ const App = () => {
     }
   };
 
-  const handleUpdateUser = async () => {
-    if (userToUpdate) {
-      const { id, name, email } = userToUpdate;
-      try {
-        await axios.put(`${API_BASE_URL}/users/${id}`, { name, email });
-        fetchUsers();
-        setSelectedUser(null);
-        setSnackbarMessage('Usuário atualizado com sucesso!');
-        setSnackbarSeverity('success');
-        setSnackbarOpen(true);
-      } catch (error) {
-        console.error('Erro ao atualizar usuário:', error);
-        setSnackbarMessage('Erro ao atualizar usuário!');
-        setSnackbarSeverity('error');
-        setSnackbarOpen(true);
-      } finally {
-        setOpenUpdateDialog(false);
-        setUserToUpdate(null);
-      }
+  const handleCreateTask = async (task) => {
+    try {
+      await axios.post(`${API_BASE_URL}/tasks`, task);
+      fetchTasks();
+      setSnackbarMessage('Tarefa criada com sucesso!');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error('Erro ao criar tarefa:', error);
+      setSnackbarMessage('Erro ao criar tarefa!');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
   };
 
-  const handleDeleteUser = async () => {
-    if (userToDelete) {
-      try {
+  const handleDelete = async () => {
+    try {
+      if (deleteEntityType === 'user' && userToDelete) {
         await axios.delete(`${API_BASE_URL}/users/${userToDelete}`);
         fetchUsers();
-        setSnackbarMessage('Usuário excluído com sucesso!');
-        setSnackbarSeverity('success');
-        setSnackbarOpen(true);
-      } catch (error) {
-        console.error('Erro ao excluir usuário:', error);
-        setSnackbarMessage('Erro ao excluir usuário!');
-        setSnackbarSeverity('error');
-        setSnackbarOpen(true);
-      } finally {
-        setOpenDeleteDialog(false);
-        setUserToDelete(null);
+      } else if (deleteEntityType === 'task' && taskToDelete) {
+        await axios.delete(`${API_BASE_URL}/tasks/${taskToDelete}`);
+        fetchTasks();
       }
+      setSnackbarMessage('Exclusão realizada com sucesso!');
+      setSnackbarSeverity('success');
+    } catch (error) {
+      console.error('Erro ao excluir:', error);
+      setSnackbarMessage('Erro ao excluir!');
+      setSnackbarSeverity('error');
+    } finally {
+      setSnackbarOpen(true);
+      setOpenDeleteDialog(false);
+      setUserToDelete(null);
+      setTaskToDelete(null);
     }
   };
 
-  const handleSelectUser = (user) => setSelectedUser(user);
-  const handleCancelDelete = () => setOpenDeleteDialog(false);
-  const handleCancelUpdate = () => setOpenUpdateDialog(false);
-  const handleOpenUpdateDialog = (user) => {
-    setUserToUpdate(user);
-    setOpenUpdateDialog(true);
+  const handleOpenDeleteDialog = (type, id) => {
+    setDeleteEntityType(type);
+    if (type === 'user') setUserToDelete(id);
+    if (type === 'task') setTaskToDelete(id);
+    setOpenDeleteDialog(true);
   };
-  const handleCloseSnackbar = () => setSnackbarOpen(false);
 
   return (
     <Router>
       <Container maxWidth="md">
         <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography variant="h4" component="h1" gutterBottom>
-            Sistema de Gerenciamento de Usuários
+            Sistema de Gerenciamento
           </Typography>
           <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
             <Button variant="contained" color="primary" component={Link} to="/">
@@ -122,75 +141,60 @@ const App = () => {
             <Button variant="contained" color="secondary" component={Link} to="/users">
               Gerenciar Usuários
             </Button>
+            <Button variant="contained" color="success" component={Link} to="/tasks">
+              Gerenciar Tarefas
+            </Button>
           </Box>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route
               path="/users"
               element={
-                <Grid container spacing={3} justifyContent="center">
-                  <Grid item xs={12} md={8}>
-                    <UserForm
-                      onSubmit={selectedUser ? handleOpenUpdateDialog : handleCreateUser}
-                      initialValues={selectedUser || {}}
-                      onCancel={() => setSelectedUser(null)}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={10}>
-                    {users.length === 0 ? (
-                      <Typography variant="h6" color="textSecondary" align="center">
-                        Nenhum usuário cadastrado.
-                      </Typography>
-                    ) : (
-                      <UserList
-                        users={users}
-                        onDelete={(id) => {
-                          setUserToDelete(id);
-                          setOpenDeleteDialog(true);
-                        }}
-                        onSelect={handleSelectUser}
-                      />
-                    )}
-                  </Grid>
-                </Grid>
+                <>
+                  <UserForm
+                    onSubmit={selectedUser ? handleCreateUser : handleCreateUser}
+                    initialValues={selectedUser || {}}
+                    onCancel={() => setSelectedUser(null)}
+                  />
+                  <UserList
+                    users={users}
+                    onDelete={(id) => handleOpenDeleteDialog('user', id)}
+                    onSelect={setSelectedUser}
+                  />
+                </>
+              }
+            />
+            <Route
+              path="/tasks"
+              element={
+                <>
+                  <TaskForm
+                    onSubmit={selectedTask ? handleCreateTask : handleCreateTask}
+                    initialValues={selectedTask || {}}
+                    onCancel={() => setSelectedTask(null)}
+                  />
+                  <TaskList
+                    tasks={tasks}
+                    onDelete={(id) => handleOpenDeleteDialog('task', id)}
+                    onSelect={setSelectedTask}
+                  />
+                </>
               }
             />
           </Routes>
         </Box>
-        <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={6000}
-          onClose={handleCloseSnackbar}
-        >
-          <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
-            {snackbarMessage}
-          </Alert>
+        <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
+          <Alert severity={snackbarSeverity}>{snackbarMessage}</Alert>
         </Snackbar>
-        <Dialog open={openDeleteDialog} onClose={handleCancelDelete}>
+        <Dialog open={openDeleteDialog} onClose={() => setOpenDeleteDialog(false)}>
           <DialogTitle>Confirmar Exclusão</DialogTitle>
           <DialogContent>
-            <Typography>Tem certeza que deseja excluir este usuário?</Typography>
+            <Typography>Tem certeza que deseja excluir?</Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCancelDelete} color="primary">
-              Cancelar
-            </Button>
-            <Button onClick={handleDeleteUser} color="secondary">
+            <Button onClick={() => setOpenDeleteDialog(false)}>Cancelar</Button>
+            <Button onClick={handleDelete} color="secondary">
               Excluir
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Dialog open={openUpdateDialog} onClose={handleCancelUpdate}>
-          <DialogTitle>Confirmar Atualização</DialogTitle>
-          <DialogContent>
-            <Typography>Tem certeza que deseja atualizar os dados deste usuário?</Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCancelUpdate} color="primary">
-              Cancelar
-            </Button>
-            <Button onClick={handleUpdateUser} color="secondary">
-              Atualizar
             </Button>
           </DialogActions>
         </Dialog>
