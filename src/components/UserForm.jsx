@@ -1,6 +1,4 @@
-// Este componente é usado para criar ou editar um contato.
-// Quando o `initialValues` contém um ID, o formulário é usado para editar um contato existente.
-// Caso contrário, ele serve para criar um novo contato.
+//Componentes de formulário que será o front-end das operações CRUD de Usuários/Contatos
  
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Grid, Typography } from '@mui/material';
@@ -39,7 +37,7 @@ const UserForm = ({ onSubmit, initialValues, onCancel }) => {
           </Typography>
         </Grid>
  
-        {/* Campo de nome */}
+        {/* Campo de nome do contato*/}
         <Grid item xs={12}>
           <TextField
             required

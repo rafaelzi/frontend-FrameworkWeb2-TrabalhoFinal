@@ -1,5 +1,7 @@
+//Componente que erencia os CRUDs de Contatos e Tarefas
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import BackgroundBox from './components/BackgroundBox'; // Importando a Box com o fundo
 import axios from 'axios';
 import UserList from './components/UserList';
 import UserForm from './components/UserForm';
@@ -22,33 +24,52 @@ import { API_BASE_URL } from './utils/config';
 
 const Home = () => (
   <Box sx={{ mt: 3, textAlign: 'center' }}>
-    <Typography variant="h4" component="h1" gutterBottom>
-      Bem-vindo seu Tilápio
+  <Typography variant="h4" component="h1" gutterBottom>
+    Bem-vindo seu Tilápio
+  </Typography>
+  <Typography variant="h6">
+    Plataforma de organização de Tilápio, permitindo este salvar contatos e fazer sua lista de tarefas
+  </Typography>
+
+  {/* A Box com fundo aplicado aqui */}
+  <BackgroundBox imageUrl="https://media.tenor.com/x9efZijA7aYAAAAM/fsh-spin.gif">
+    <Typography variant="h5" color="white">
+    Tilápio giratório!
     </Typography>
-    <Typography variant="h6">
-      Plataforma de organização de Tilápio, permitindo este salvar contatos e fazer sua lsita de tarefas
+    <Typography variant="body1" color="white">
+      Tilápio giratório
     </Typography>
-  </Box>
+  </BackgroundBox>
+
+</Box>
 );
 
 const App = () => {
+  // Estado para armazenar as listas de contatos e tarefas
   const [users, setUsers] = useState([]);
   const [tasks, setTasks] = useState([]);
+  // Estado para armazenar o usuário ou tarefa selecionado para edição
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
+  // Estado para a mensagem da Snackbar
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  // Estado para controlar a visibilidade da Snackbar
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  // Estado para definir o tipo de mensagem da Snackbar (sucesso, erro, etc.)
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  // Estados para os diálogos de confirmação de atualização e exclusão
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [deleteEntityType, setDeleteEntityType] = useState(''); // 'user' ou 'task'
   const [userToDelete, setUserToDelete] = useState(null);
   const [taskToDelete, setTaskToDelete] = useState(null);
 
+  // Hook para buscar os usuários e tarefas ao carregar o componente
   useEffect(() => {
     fetchUsers();
     fetchTasks();
   }, []);
 
+  // Função para buscar usuários da API
   const fetchUsers = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/users`);
@@ -58,6 +79,7 @@ const App = () => {
     }
   };
 
+  // Função para buscar tarefas da API
   const fetchTasks = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/tasks`);
@@ -67,6 +89,7 @@ const App = () => {
     }
   };
 
+  // Função para criar um novo usuário
   const handleCreateUser = async (user) => {
     try {
       await axios.post(`${API_BASE_URL}/users`, user);
@@ -82,6 +105,7 @@ const App = () => {
     }
   };
 
+  // Função para criar uma nova tarefa
   const handleCreateTask = async (task) => {
     try {
       await axios.post(`${API_BASE_URL}/tasks`, task);
@@ -97,6 +121,7 @@ const App = () => {
     }
   };
 
+  // Função para excluir um usuário ou tarefa
   const handleDelete = async () => {
     try {
       if (deleteEntityType === 'user' && userToDelete) {
@@ -132,7 +157,7 @@ const App = () => {
       <Container maxWidth="md">
         <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography variant="h4" component="h1" gutterBottom>
-            Sistema de Gerenciamento
+            Organizador Peixótico
           </Typography>
           <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
             <Button variant="contained" color="primary" component={Link} to="/">

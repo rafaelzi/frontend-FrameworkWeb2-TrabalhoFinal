@@ -1,6 +1,4 @@
-// Este componente exibe uma lista de contatos em uma tabela interativa.
-// Ele permite ao contato editar ou excluir registros através de botões de ação associados a cada linha.
-// O Material UI é usado para a tabela, botões e estilização.
+//Componente que exibe a lista de Usuários/Contatos
  
 import React from 'react';
 import {
