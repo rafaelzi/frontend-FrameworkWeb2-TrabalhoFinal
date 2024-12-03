@@ -1,29 +1,32 @@
-// Este componente é usado para criar ou editar um usuário.
-// Quando o `initialValues` contém um ID, o formulário é usado para editar um usuário existente.
-// Caso contrário, ele serve para criar um novo usuário.
+// Este componente é usado para criar ou editar um contato.
+// Quando o `initialValues` contém um ID, o formulário é usado para editar um contato existente.
+// Caso contrário, ele serve para criar um novo contato.
  
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Grid, Typography } from '@mui/material';
  
 const UserForm = ({ onSubmit, initialValues, onCancel }) => {
-  // Estados para os campos 'name' e 'email'
+  // Estados para os campos 'name', 'email' e 'phoneNumber'
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
  
   // Atualiza os valores do formulário se `initialValues` for fornecido
   useEffect(() => {
     setName(initialValues.name || '');
     setEmail(initialValues.email || '');
+    setPhoneNumber(initialValues.phoneNumber || '');
   }, [initialValues]);
  
   // Função que lida com o envio do formulário
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Envia os dados do usuário para o handler `onSubmit`
-    onSubmit({ id: initialValues.id, name, email });
+    // Envia os dados do contato para o handler `onSubmit`
+    onSubmit({ id: initialValues.id, name, email, phoneNumber });
     // Limpa os campos após o envio
     setName('');
     setEmail('');
+    setPhoneNumber('');
   };
  
   return (
@@ -32,7 +35,7 @@ const UserForm = ({ onSubmit, initialValues, onCancel }) => {
         {/* Título que muda com base em `initialValues` (criar ou editar) */}
         <Grid item xs={12}>
           <Typography variant="h6" gutterBottom>
-            {initialValues.id ? 'Editar Usuário' : 'Criar Usuário'}
+            {initialValues.id ? 'Editar Contato' : 'Salvar Contato'}
           </Typography>
         </Grid>
  
@@ -76,6 +79,36 @@ const UserForm = ({ onSubmit, initialValues, onCancel }) => {
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)} // Atualiza o valor do campo 'email'
+            variant="outlined"
+            InputProps={{
+              style: {
+                backgroundColor: '#ffffff', // Cor de fundo do campo
+              },
+            }}
+            sx={{
+              // Estilização do campo de entrada
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderRadius: '8px', // Borda arredondada
+                },
+                '&:hover fieldset': {
+                  borderColor: '#4fc3f7', // Cor da borda ao passar o mouse
+                },
+              },
+            }}
+          />
+        </Grid>
+
+         {/* Campo de telefone */}
+         <Grid item xs={12}>
+          <TextField
+            required
+            fullWidth
+            id="phoneNumber"
+            label={phoneNumber.length === 0 ? 'Telefone' : ''} // O rótulo desaparece se o campo estiver preenchido
+            name="phoneNumber"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)} // Atualiza o valor do campo 'telefone'
             variant="outlined"
             InputProps={{
               style: {

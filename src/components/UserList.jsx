@@ -1,5 +1,5 @@
-// Este componente exibe uma lista de usuários em uma tabela interativa.
-// Ele permite ao usuário editar ou excluir registros através de botões de ação associados a cada linha.
+// Este componente exibe uma lista de contatos em uma tabela interativa.
+// Ele permite ao contato editar ou excluir registros através de botões de ação associados a cada linha.
 // O Material UI é usado para a tabela, botões e estilização.
  
 import React from 'react';
@@ -21,7 +21,7 @@ const UserList = ({ users, onDelete, onSelect }) => {
     <Box sx={{ mt: 3 }}>
       {/* Título da seção */}
       <Typography variant="h6" gutterBottom>
-        Lista de Usuários
+        Lista de Contatos
       </Typography>
  
       {/* Container da Tabela com estilização */}
@@ -34,39 +34,42 @@ const UserList = ({ users, onDelete, onSelect }) => {
               <TableCell align="center" sx={{ color: '#fff', fontWeight: 'bold' }}>ID</TableCell>
               <TableCell align="center" sx={{ color: '#fff', fontWeight: 'bold' }}>Nome</TableCell>
               <TableCell align="center" sx={{ color: '#fff', fontWeight: 'bold' }}>Email</TableCell>
+              <TableCell align="center" sx={{ color: '#fff', fontWeight: 'bold' }}>Telefone</TableCell>
               <TableCell align="center" sx={{ color: '#fff', fontWeight: 'bold' }}>Ações</TableCell>
             </TableRow>
           </TableHead>
  
           {/* Corpo da Tabela */}
           <TableBody>
-            {/* Mapeia cada usuário e cria uma linha para ele */}
+            {/* Mapeia cada contato e cria uma linha para ele */}
             {users.map((user) => (
               <TableRow key={user.id}>
-                {/* Exibe o ID do usuário */}
+                {/* Exibe o ID do contato */}
                 <TableCell align="center">{user.id}</TableCell>
-                {/* Exibe o nome do usuário */}
+                {/* Exibe o nome do contato */}
                 <TableCell align="center">{user.name}</TableCell>
-                {/* Exibe o e-mail do usuário */}
+                {/* Exibe o e-mail do contato */}
                 <TableCell align="center">{user.email}</TableCell>
+                {/* Exibe o telefone do contato */}
+                <TableCell align="center">{user.phoneNumber}</TableCell>
  
                 {/* Coluna de ações: botões para editar ou excluir */}
                 <TableCell align="center">
-                  {/* Botão para editar o usuário */}
+                  {/* Botão para editar o contato */}
                   <Button
                     variant="outlined"
                     size="small"
-                    onClick={() => onSelect(user)} // Chama a função onSelect passando o usuário
+                    onClick={() => onSelect(user)} // Chama a função onSelect passando o contato
                     sx={{ mr: 1, borderColor: '#4fc3f7', color: '#4fc3f7' }}
                   >
                     Editar
                   </Button>
  
-                  {/* Botão para excluir o usuário */}
+                  {/* Botão para excluir o contato */}
                   <Button
                     variant="outlined"
                     size="small"
-                    onClick={() => onDelete(user.id)} // Chama a função onDelete passando o ID do usuário
+                    onClick={() => onDelete(user.id)} // Chama a função onDelete passando o ID do contato
                     sx={{ borderColor: '#ff7961', color: '#ff7961' }}
                   >
                     Excluir

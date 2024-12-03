@@ -23,10 +23,10 @@ import { API_BASE_URL } from './utils/config';
 const Home = () => (
   <Box sx={{ mt: 3, textAlign: 'center' }}>
     <Typography variant="h4" component="h1" gutterBottom>
-      Bem-vindo ao Sistema de Gerenciamento
+      Bem-vindo seu Tilápio
     </Typography>
     <Typography variant="h6">
-      Navegue até "Gerenciar Usuários" ou "Gerenciar Tarefas" para visualizar e gerenciar os dados cadastrados.
+      Plataforma de organização de Tilápio, permitindo este salvar contatos e fazer sua lsita de tarefas
     </Typography>
   </Box>
 );
@@ -54,7 +54,7 @@ const App = () => {
       const response = await axios.get(`${API_BASE_URL}/users`);
       setUsers(response.data);
     } catch (error) {
-      console.error('Erro ao buscar usuários:', error);
+      console.error('Erro ao buscar contatos:', error);
     }
   };
 
@@ -71,12 +71,12 @@ const App = () => {
     try {
       await axios.post(`${API_BASE_URL}/users`, user);
       fetchUsers();
-      setSnackbarMessage('Usuário criado com sucesso!');
+      setSnackbarMessage('Contato salvo com sucesso!');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
     } catch (error) {
-      console.error('Erro ao criar usuário:', error);
-      setSnackbarMessage('Erro ao criar usuário!');
+      console.error('Erro ao salvar contato:', error);
+      setSnackbarMessage('Erro ao salvar contato!');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
     }
@@ -139,7 +139,7 @@ const App = () => {
               Home
             </Button>
             <Button variant="contained" color="secondary" component={Link} to="/users">
-              Gerenciar Usuários
+              Gerenciar Contatos
             </Button>
             <Button variant="contained" color="success" component={Link} to="/tasks">
               Gerenciar Tarefas
